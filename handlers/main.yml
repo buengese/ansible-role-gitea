@@ -1,0 +1,13 @@
+---
+- name: "Restart gitea"
+  become: true
+  ansible.builtin.service:
+    name: gitea
+    state: restarted
+  when: ansible_service_mgr == "systemd"
+
+- name: "Reload systemd"
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: ansible_service_mgr == "systemd"
