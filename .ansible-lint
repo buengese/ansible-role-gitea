@@ -1,9 +1,11 @@
-use_default_rules: true
-
+---
 exclude_paths:
-  - venv/
-  - molecule/default/
-  - tests/
+  - molecule/
+  - .github/
 
-#skip_list:
-#  - '301'
+skip_list:
+  - no-relative-paths
+  - literal-compare
+  - risky-shell-pipe
+  - no-changed-when
+  - unnamed-task
