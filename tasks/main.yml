@@ -1,91 +1,36 @@
 ---
-- name: Gather variables for each operating system
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
-    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
-    - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
-    - "{{ ansible_distribution | lower }}.yml"
-    - "{{ ansible_os_family | lower }}.yml"
-
-- name: Gather installed packages for checks in the role (fail2ban)
+- name: Gather installed packages for checks later on
   ansible.builtin.package_facts:
     manager: auto
 
-- name: "Check gitea version"
-  ansible.builtin.shell: "set -eo pipefail; /usr/local/bin/gitea -v | cut -d' ' -f 3"
-  args:
-    executable: /bin/bash
-  register: gitea_active_version
-  changed_when: false
-  failed_when: false
-  when: gitea_version_check|bool
+- name: Gather variables for each operating system
+  ansible.builtin.include_vars: "{{ lookup('first_found', gitea_variables) }}"
 
-- name: "Download the binary"
-  ansible.builtin.get_url:
-    url: "{{ gitea_dl_url }}"
-    dest: /usr/local/bin/gitea
-    owner: root
-    group: root
-    mode: 0755
-    force: true
-  notify: "Restart gitea"
-  when: (not gitea_version_check|bool) or (not ansible_check_mode and (gitea_active_version.stdout != gitea_version))
+- name: Gather versioning information
+  import_tasks: versioncheck.yml
 
-- include: create_user.yml
+- name: create gitea user and role
+  import_tasks: create_user.yml
+  become: true
 
-- name: "Create config and data directory"
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ gitea_user }}"
-    group: "{{ gitea_group }}"
-    mode: '0755'
-  with_items:
-    - "/etc/gitea"
+- name: install or update gitea
+  import_tasks: install.yml
 
-- name: "Create data directory"
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ gitea_user }}"
-    group: "{{ gitea_group }}"
-    mode: 'u=rwX,g=rX,o='
-    recurse: true
-  with_items:
-    - "{{ gitea_home }}"
-    - "{{ gitea_home }}/data"
-    - "{{ gitea_home }}/custom"
-    - "{{ gitea_home }}/custom/https"
-    - "{{ gitea_home }}/custom/mailer"
-    - "{{ gitea_home }}/indexers"
-    - "{{ gitea_home }}/log"
-    - "{{ gitea_repository_root }}"
+- name: Create directories
+  import_tasks: directory.yml
+  become: true
 
-- include: install_systemd.yml
+- name: setup gitea systemd service
+  include_tasks: install_systemd.yml
   when: ansible_service_mgr == "systemd"
 
-- include_tasks: jwt_secrets.yml
-- name: 'Install git'
-  ansible.builtin.package:
-    name: 'git'
-    state: 'present'
+- name: generate JWT Secrets if undefined
+  import_tasks: jwt_secrets.yml
 
-- name: "Configure gitea"
-  ansible.builtin.template:
-    src: gitea.ini.j2
-    dest: /etc/gitea/gitea.ini
-    owner: "{{ gitea_user }}"
-    group: "{{ gitea_group }}"
-    mode: 0600
-  notify: "Restart gitea"
+- name: generate gitea secrets if undefined
+  import_tasks: gitea_secrets.yml
+  become: true
 
-- name: "Service gitea"
-  ansible.builtin.service:
-    name: gitea
-    state: started
-    enabled: true
-  when: ansible_service_mgr == "systemd"
-
-- include: fail2ban.yml
-  when: gitea_fail2ban_enabled|bool
+- name: configure gitea
+  import_tasks: configure.yml
+  become: true

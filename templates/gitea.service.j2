@@ -1,14 +1,18 @@
 [Unit]
-Description=Gitea git server
+Description=Gitea (Git with a cup of tea)
 After=network.target
+After=mariadb.service
 
 [Service]
+RestartSec=2s
+Type=simple
 User={{ gitea_user }}
 Group={{ gitea_group }}
 ExecStart=/usr/local/bin/gitea web -c /etc/gitea/gitea.ini
 Restart=on-failure
 WorkingDirectory={{ gitea_home }}
 {% if gitea_systemd_cap_net_bind_service %}
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_BIND_SERVICE
 {% endif %}
 
