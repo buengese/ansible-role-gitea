@@ -1,15 +1,6 @@
 ---
-dependency:
-  name: galaxy
-
 driver:
   name: docker
-
-lint: |
-  set -e
-  yamllint .
-  ansible-lint
-
 platforms:
   - name: instance
     image: geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu1804}-ansible:latest
@@ -18,8 +9,10 @@ platforms:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
-
-
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
 provisioner:
   name: ansible
   playbooks:
@@ -39,5 +32,3 @@ scenario:
 
 verifier:
   name: testinfra
-  lint:
-    name: flake8
