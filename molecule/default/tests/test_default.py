@@ -1,4 +1,5 @@
 import os
+from time import sleep
 import testinfra.utils.ansible_runner
 
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
@@ -21,5 +22,6 @@ def test_gitea_service_running(host):
     assert gitea.is_running
 
 def test_gitea_reachable(host):
+    sleep(30)
     gitea_http = host.run('curl http://localhost:3000')
     assert gitea_http.rc == 0
