@@ -1,0 +1,27 @@
+---
+galaxy_info:
+  role_name: gitea
+  author: buengese
+  description: Ansible Role - Gitea
+  min_ansible_version: "2.10"
+  license: BSD-3-Clause
+  galaxy_tags:
+    - git
+    - gitea
+    - system
+    - development
+    - sourcecontrol
+    - selfhosted
+    - gitserver
+    - gogs
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: Ubuntu
+      versions:
+        - focal
+    - name: Fedora
+      versions:
+        - '35'
