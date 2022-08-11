@@ -47,6 +47,7 @@ Supported OS
 - Debian 10
 - Debian 11
 - Fedora 35
+- ArchLinux
 
 
 License
