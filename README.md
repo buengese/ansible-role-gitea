@@ -26,7 +26,7 @@ Role Variables
 
 The following variables determine the install and update behaviour of this role.
 
-* `gitea_version`: Define an exact version of gitea to install or use 'latest' to install the latest version. (Default `1.16.8`)
+* `gitea_version`: Define an exact version of gitea to install or use 'latest' to install the latest version. (Default `1.18.3`)
 * `gitea_version_check`: Check if install version != `gitea_version` before starting the download. (Default `true`)
 * `gitea_gpg_key`: The gpg key with which the binary is signed.
 * `gitea_gpg_server`: A gpg key server where this role can download the gpg key
