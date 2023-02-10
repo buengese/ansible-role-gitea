@@ -1,5 +1,6 @@
+# code: language=ansible
 ---
-- name: "Create Gitea Group"
+- name: Create Gitea Group
   ansible.builtin.group:
     name: "{{ gitea_group }}"
     system: true
@@ -8,9 +9,11 @@
 - name: Switch shell when not using the builtin ssh server
   ansible.builtin.set_fact:
     gitea_shell: "/bin/bash"
-  when: "not gitea_start_ssh and gitea_shell == '/bin/false'"
+  when:
+    - not gitea_start_ssh
+    - gitea_shell == '/bin/false'
 
-- name: "Create Gitea user"
+- name: Create Gitea user
   ansible.builtin.user:
     name: "{{ gitea_user }}"
     groups: "{{ gitea_group }}"

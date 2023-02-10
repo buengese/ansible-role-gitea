@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 - name: Gather installed packages for checks later on
   ansible.builtin.package_facts:
@@ -7,30 +8,30 @@
   ansible.builtin.include_vars: "{{ lookup('first_found', gitea_variables) }}"
 
 - name: Gather versioning information
-  import_tasks: versioncheck.yml
+  ansible.builtin.import_tasks: versioncheck.yml
 
-- name: create gitea user and role
-  import_tasks: create_user.yml
+- name: Create gitea user and role
+  ansible.builtin.import_tasks: create_user.yml
   become: true
 
-- name: install or update gitea
-  import_tasks: install.yml
+- name: Install or update gitea
+  ansible.builtin.import_tasks: install.yml
 
 - name: Create directories
-  import_tasks: directory.yml
+  ansible.builtin.import_tasks: directory.yml
   become: true
 
-- name: setup gitea systemd service
-  include_tasks: install_systemd.yml
+- name: Setup gitea systemd service
+  ansible.builtin.include_tasks: install_systemd.yml
   when: ansible_service_mgr == "systemd"
 
-- name: generate JWT Secrets if undefined
-  import_tasks: jwt_secrets.yml
+- name: Generate JWT Secrets if undefined
+  ansible.builtin.import_tasks: jwt_secrets.yml
 
-- name: generate gitea secrets if undefined
-  import_tasks: gitea_secrets.yml
+- name: Generate gitea secrets if undefined
+  ansible.builtin.import_tasks: gitea_secrets.yml
   become: true
 
-- name: configure gitea
-  import_tasks: configure.yml
+- name: Configure gitea
+  ansible.builtin.import_tasks: configure.yml
   become: true

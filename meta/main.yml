@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 galaxy_info:
   role_name: gitea
@@ -23,7 +24,7 @@ galaxy_info:
         - focal
     - name: Fedora
       versions:
-        - '35'
+        - '37'
     - name: ArchLinux
       versions:
         - all

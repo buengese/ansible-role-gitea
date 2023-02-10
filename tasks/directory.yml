@@ -1,3 +1,4 @@
+# code: language=ansible
 ---
 - name: "Create config and data directory"
   ansible.builtin.file:

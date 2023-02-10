@@ -1,5 +1,6 @@
+# code: language=ansible
 ---
-- name: "Configure gitea"
+- name: Configure gitea
   ansible.builtin.template:
     src: gitea.ini.j2
     dest: /etc/gitea/gitea.ini
@@ -8,7 +9,7 @@
     mode: 0600
   notify: "Restart gitea"
 
-- name: "Service gitea"
+- name: Enable systemd service
   ansible.builtin.systemd:
     name: gitea
     state: started
