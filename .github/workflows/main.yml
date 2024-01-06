@@ -1,5 +1,3 @@
-# code: language=yaml
----
 name: Integration
 on:
   push:
@@ -16,10 +14,11 @@ jobs:
     strategy:
       matrix:
         distro:
+          - debian12
           - debian11
-          - debian10
           - ubuntu2204
-          - fedora37
+          - fedora39
+          - rockylinux9
 
     steps:
       - name: Check out the codebase.
@@ -31,7 +30,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install ansible-lint molecule[docker] pytest-testinfra yamllint
+        run: pip3 install ansible-lint molecule molecule-plugins[docker] yamllint
 
       - name: Run Molecule tests.
         run: molecule test -s default
@@ -39,4 +38,3 @@ jobs:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_DISTRO: ${{ matrix.distro }}
-
