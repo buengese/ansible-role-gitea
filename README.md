@@ -26,7 +26,7 @@ Role Variables
 
 The following variables determine the install and update behaviour of this role.
 
-* `gitea_version`: Define an exact version of gitea to install or use 'latest' to install the latest version. (Default `1.18.3`)
+* `gitea_version`: Define an exact version of gitea to install or use 'latest' to install the latest version. (Default `latest`)
 * `gitea_version_check`: Check if install version != `gitea_version` before starting the download. (Default `true`)
 * `gitea_gpg_key`: The gpg key with which the binary is signed.
 * `gitea_gpg_server`: A gpg key server where this role can download the gpg key
@@ -40,15 +40,15 @@ The following variables should always be changed.
 
 This role also defines variables for most of the gitea configuration see [defaults/main.yml](defaults/main.yml) for a full list. The function of these variables is explained in the gitea [config cheat-sheet](https://docs.gitea.io/en-us/config-cheat-sheet/).
 
+## Supported Operating Systems
 
-Supported OS
-------------
-- Ubuntu 20.04
-- Debian 10
-- Debian 11
-- Fedora 35
+This role is tested and supported on the following operating systems:
+
+- Debian 10 (Buster), 11 (Bullseye), 12 (Bookworm)
+- Ubuntu 20.04 (Focal Fossa), 22.04 (Jammy Jellyfish)
+- Fedora 39
 - ArchLinux
-
+- Rocky Linux 9
 
 License
 -------
