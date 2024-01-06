@@ -1,0 +1,22 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Gather the package facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Check if gitea service is running
+      ansible.builtin.fail:
+        msg: "gitea service is not running"
+      when: "'gitea.service' not in ansible_facts.services or ansible_facts.services['gitea.service'].state != 'running'"
+
+    - name: Check port 3000
+      ansible.builtin.wait_for:
+        port: 3000
