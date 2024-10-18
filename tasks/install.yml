@@ -77,3 +77,12 @@
         owner: root
         group: root
       notify: Restart gitea
+
+    - name: Clean up temp files
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /tmp/{{ gitea_filename }}.xz
+        - /tmp/{{ gitea_filename }}.xz.asc
+        - /tmp/{{ gitea_filename }}
