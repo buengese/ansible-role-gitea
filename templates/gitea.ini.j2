@@ -58,12 +58,16 @@ OFFLINE_MODE          = {{ gitea_offline_mode | ternary('true', 'false') }}
 APP_DATA_PATH         = {{ gitea_home }}/data
 {% if gitea_lfs_server_enabled | bool -%}
 LFS_START_SERVER      = true
-LFS_CONTENT_PATH      = {{ gitea_lfs_content_path }}
 LFS_JWT_SECRET        = {{ gitea_lfs_jwt_secret }}
 {% endif %}
 {% if gitea_server_extra_config is defined -%}
 {{ gitea_server_extra_config }}
 {% endif -%}
+
+{% if gitea_lfs_server_enabled | bool -%}
+[lfs]
+PATH      = {{ gitea_lfs_content_path }}
+{% endif %}
 
 [database]
 DB_TYPE  = {{ gitea_db_type }}
