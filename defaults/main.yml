@@ -34,7 +34,7 @@ gitea_repository_upload_extra_config: ''
 # -> https://docs.gitea.io/en-us/config-cheat-sheet/#ui-ui
 gitea_show_user_email: false
 gitea_theme_default: 'gitea-auto'
-gitea_themes: 'gitea-auto'
+gitea_themes: 'gitea-auto,gitea-dark,gitea'
 gitea_ui_extra_config: ''
 
 # Server (server)
